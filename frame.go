@@ -27,6 +27,10 @@ func (f *Frame) AllocBuffer(align int) error {
 	return newError(C.av_frame_get_buffer(f.c, C.int(align)))
 }
 
+func (f *Frame) MakeWritable() error {
+	return newError(C.av_frame_make_writable(f.c))
+}
+
 func (f *Frame) AllocSamples(sf SampleFormat, nbChannels, nbSamples, align int) error {
 	return newError(C.av_samples_alloc(&f.c.data[0], &f.c.linesize[0], C.int(nbChannels), C.int(nbSamples), (C.enum_AVSampleFormat)(sf), C.int(align)))
 }

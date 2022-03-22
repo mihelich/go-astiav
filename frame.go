@@ -5,11 +5,18 @@ package astiav
 //#include <libavutil/samplefmt.h>
 import "C"
 
+import "unsafe"
+
 const NumDataPointers = uint(C.AV_NUM_DATA_POINTERS)
 
 // https://github.com/FFmpeg/FFmpeg/blob/n5.0/libavutil/frame.h#L317
 type Frame struct {
 	c *C.struct_AVFrame
+}
+
+// Client may cast this to *C.struct_AVFrame imported via cgo in their own package.
+func (f *Frame) NativeHandle() unsafe.Pointer {
+	return unsafe.Pointer(f.c)
 }
 
 func newFrameFromC(c *C.struct_AVFrame) *Frame {
